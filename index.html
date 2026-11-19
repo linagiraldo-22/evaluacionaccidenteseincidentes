@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación SST - EUNOia SST Labs</title>
+    <!-- Google Fonts: Quicksand & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Variables de marca EUNOia SST Labs */
+        :root {
+            --eunoia-light: #F5F0FA;
+            --eunoia-soft: #E4D8F3;
+            --eunoia-border: #D5C2EC;
+            --eunoia-default: #8C6BB1;
+            --eunoia-dark: #6D4E91;
+            --eunoia-deep: #4A3267;
+        }
+
+        /* Reset y Base Autónoma (No depende de librerías externas bloqueables) */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #F5F0FA 0%, #E6D7F5 100%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #1f2937;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+        .font-brand {
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        /* Utilidades críticas garantizadas */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Contenedor Principal tipo Tarjeta */
+        .app-card {
+            max-width: 680px;
+            width: 100%;
+            margin: auto;
+            background-color: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 20px 35px -10px rgba(74, 50, 103, 0.15);
+            border: 1px solid var(--eunoia-soft);
+            overflow: hidden;
+        }
+
+        /* Encabezado Corporativo */
+        .app-header {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--eunoia-soft);
+            padding: 20px 28px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .logo-svg-wrap {
+            width: 64px;
+            height: 64px;
+            flex-shrink: 0;
+        }
+        .brand-title {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: 30px;
+            color: var(--eunoia-default);
+            margin: 0;
+            line-height: 1;
+            letter-spacing: 0.02em;
+        }
+        .brand-subtitle {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--eunoia-default);
+            margin: 3px 0 0 0;
+            letter-spacing: 0.22em;
+        }
+        .brand-slogan {
+            font-size: 12px;
+            color: var(--eunoia-dark);
+            margin: 3px 0 0 0;
+            opacity: 0.85;
+        }
+        .header-pill {
+            background-color: var(--eunoia-light);
+            color: var(--eunoia-dark);
+            padding: 7px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid var(--eunoia-soft);
+        }
+
+        /* Cuerpo interior */
+        .app-body {
+            padding: 28px;
+        }
+        @media (max-width: 600px) {
+            .app-header {
+                padding: 16px 20px;
+                justify-content: center;
+                text-align: left;
+            }
+            .app-body {
+                padding: 20px;
+            }
+        }
+
+        /* Tipografía y etiquetas */
+        .badge-top {
+            display: inline-block;
+            background-color: var(--eunoia-light);
+            color: var(--eunoia-dark);
+            font-weight: 700;
+            font-size: 11px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 8px;
+        }
+        .main-heading {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--eunoia-deep);
+            margin: 0 0 8px 0;
+        }
+        .sub-text {
+            font-size: 14px;
+            color: #4b5563;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Formulario de Registro */
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        @media (max-width: 580px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+        .form-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--eunoia-deep);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            color: var(--eunoia-default);
+            font-size: 15px;
+            pointer-events: none;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 14px 12px 40px;
+            border-radius: 12px;
+            border: 1.5px solid var(--eunoia-soft);
+            font-size: 14px;
+            font-family: inherit;
+            color: #1f2937;
+            background-color: #ffffff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-control:focus {
+            border-color: var(--eunoia-default);
+            box-shadow: 0 0 0 3px var(--eunoia-light);
+        }
+
+        /* Caja de recordatorio */
+        .reminder-box {
+            margin-top: 20px;
+            background-color: var(--eunoia-light);
+            border: 1px solid var(--eunoia-soft);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.55;
+            text-align: left;
+        }
+
+        /* Alerta de error de formulario */
+        .alert-error {
+            margin-bottom: 16px;
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
+            color: #b91c1c;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-align: left;
+        }
+
+        /* Botones Principales */
+        .btn-primary {
+            margin-top: 22px;
+            width: 100%;
+            background-color: var(--eunoia-default);
+            color: #ffffff;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(140, 107, 177, 0.3);
+            transition: background-color 0.2s, transform 0.15s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-primary:hover {
+            background-color: var(--eunoia-dark);
+            transform: translateY(-1px);
+        }
+        .btn-secondary {
+            background-color: var(--eunoia-light);
+            color: var(--eunoia-deep);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 14px 20px;
+            border: 1px solid var(--eunoia-soft);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-secondary:hover {
+            background-color: var(--eunoia-soft);
+        }
+
+        /* Barra de progreso del Quiz */
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--eunoia-dark);
+            margin-bottom: 6px;
+        }
+        .progress-track {
+            width: 100%;
+            height: 10px;
+            background-color: var(--eunoia-light);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: var(--eunoia-default);
+            border-radius: 999px;
+            transition: width 0.3s ease;
+        }
+
+        /* Historia del Caso */
+        .story-box {
+            background-color: #f9fafb;
+            border-left: 4px solid var(--eunoia-default);
+            padding: 16px;
+            border-radius: 0 16px 16px 0;
+            margin: 12px 0 18px 0;
+            font-size: 15px;
+            color: #1f2937;
+            line-height: 1.6;
+            font-weight: 500;
+            text-align: left;
+        }
+        .question-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--eunoia-deep);
+            margin: 0 0 12px 0;
+            text-align: left;
+        }
+
+        /* Tarjetas de Opción */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option-btn {
+            width: 100%;
+            text-align: left;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 2px solid var(--eunoia-soft);
+            background-color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+        .option-btn:hover:not(.disabled) {
+            background-color: var(--eunoia-light);
+            border-color: var(--eunoia-default);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px -3px rgba(140, 107, 177, 0.2);
+        }
+        .option-btn.disabled {
+            cursor: default;
+        }
+        .option-btn.correct-choice {
+            border-color: #22c55e !important;
+            background-color: #f0fdf4 !important;
+        }
+        .option-btn.wrong-choice {
+            border-color: #f87171 !important;
+            background-color: #fef2f2 !important;
+        }
+        .option-btn.dimmed {
+            opacity: 0.55;
+        }
+        .option-letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: var(--eunoia-light);
+            color: var(--eunoia-deep);
+            font-weight: 700;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+            border: 1px solid var(--eunoia-soft);
+        }
+        .correct-choice .option-letter {
+            background-color: #16a34a;
+            color: #ffffff;
+            border-color: #16a34a;
+        }
+        .wrong-choice .option-letter {
+            background-color: #ef4444;
+            color: #ffffff;
+            border-color: #ef4444;
+        }
+        .option-text {
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
+            line-height: 1.45;
+        }
+
+        /* Retroalimentación Pedagógica */
+        .feedback-card {
+            margin-top: 18px;
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid transparent;
+            text-align: left;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .feedback-card.feedback-success {
+            background-color: #f0fdf4;
+            border-color: #86efac;
+            color: #14532d;
+        }
+        .feedback-card.feedback-warn {
+            background-color: #fffbeb;
+            border-color: #fde68a;
+            color: #78350f;
+        }
+
+        /* Pantalla de Resultados */
+        .result-icon-circle {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 12px auto;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            background-color: var(--eunoia-light);
+            color: var(--eunoia-default);
+        }
+        .score-pill-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 20px;
+            background-color: var(--eunoia-light);
+            border: 1px solid var(--eunoia-soft);
+            padding: 12px 24px;
+            border-radius: 16px;
+            margin: 16px 0 22px 0;
+        }
+        .score-divider {
+            width: 1px;
+            height: 34px;
+            background-color: var(--eunoia-border);
+        }
+        .canvas-frame {
+            border: 2px solid var(--eunoia-soft);
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: #ffffff;
+            padding: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            position: relative;
+        }
+        .cert-img-preview {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 12px;
+            -webkit-touch-callout: default;
+            user-select: auto;
+        }
+        .mobile-help-box {
+            background-color: #f0fdf4;
+            border: 1.5px solid #86efac;
+            color: #14532d;
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-top: 14px;
+            text-align: left;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .btn-whatsapp {
+            background-color: #16a34a;
+            color: #ffffff;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 15px;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
+            transition: background-color 0.2s, transform 0.15s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+        .btn-whatsapp:hover {
+            background-color: #15803d;
+        }
+        /* Modal Pantalla Completa para Captura en Celular */
+        .fullscreen-modal {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(17, 24, 39, 0.94);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+        }
+        .fullscreen-modal img {
+            max-width: 100%;
+            max-height: 78vh;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: #fff;
+        }
+        .actions-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .actions-row .btn-primary {
+            margin-top: 0;
+            flex: 1;
+            min-width: 220px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Contenedor Principal -->
+    <main class="app-card">
+        
+        <!-- Encabezado con Logo EUNOia SST Labs -->
+        <header class="app-header">
+            <div class="brand-box">
+                <!-- Recreación SVG del Logo de EUNOia SST Labs -->
+                <div class="logo-svg-wrap">
+                    <svg viewBox="0 0 120 120" style="width: 100%; height: 100%; display: block;">
+                        <rect x="4" y="4" width="112" height="112" rx="26" fill="#8C6BB1" />
+                        <circle cx="60" cy="60" r="45" fill="#FFFFFF" />
+                        <!-- Red de conexiones -->
+                        <g stroke="#8C6BB1" stroke-width="3.2" stroke-linecap="round">
+                            <line x1="48" y1="42" x2="35" y2="30" />
+                            <line x1="48" y1="42" x2="72" y2="38" />
+                            <line x1="48" y1="42" x2="32" y2="55" />
+                            <line x1="48" y1="42" x2="45" y2="75" />
+                            <line x1="48" y1="42" x2="78" y2="62" />
+                            <line x1="78" y1="62" x2="72" y2="38" />
+                            <line x1="78" y1="62" x2="45" y2="75" />
+                            <line x1="78" y1="62" x2="65" y2="82" />
+                            <line x1="45" y1="75" x2="60" y2="94" />
+                        </g>
+                        <!-- Nodos pequeños -->
+                        <circle cx="35" cy="30" r="5" fill="#FFFFFF" stroke="#8C6BB1" stroke-width="3.2" />
+                        <circle cx="72" cy="38" r="5" fill="#FFFFFF" stroke="#8C6BB1" stroke-width="3.2" />
+                        <circle cx="32" cy="55" r="5" fill="#FFFFFF" stroke="#8C6BB1" stroke-width="3.2" />
+                        <circle cx="65" cy="82" r="5" fill="#FFFFFF" stroke="#8C6BB1" stroke-width="3.2" />
+                        <circle cx="60" cy="94" r="5" fill="#FFFFFF" stroke="#8C6BB1" stroke-width="3.2" />
+                        <!-- Nodo Persona 1 -->
+                        <circle cx="48" cy="42" r="12" fill="#FFFFFF" stroke="#8C6BB1" stroke-width="3.2" />
+                        <circle cx="48" cy="39" r="3.8" fill="none" stroke="#8C6BB1" stroke-width="2.5" />
+                        <path d="M41 49 C41 44 55 44 55 49" fill="none" stroke="#8C6BB1" stroke-width="2.5" stroke-linecap="round" />
+                        <!-- Nodo Persona 2 -->
+                        <circle cx="78" cy="62" r="13" fill="#FFFFFF" stroke="#8C6BB1" stroke-width="3.2" />
+                        <circle cx="78" cy="59" r="4" fill="none" stroke="#8C6BB1" stroke-width="2.5" />
+                        <path d="M70 70 C70 64 86 64 86 70" fill="none" stroke="#8C6BB1" stroke-width="2.5" stroke-linecap="round" />
+                        <!-- Nodo Persona 3 -->
+                        <circle cx="45" cy="75" r="11" fill="#FFFFFF" stroke="#8C6BB1" stroke-width="3.2" />
+                        <circle cx="45" cy="72" r="3.5" fill="none" stroke="#8C6BB1" stroke-width="2.5" />
+                        <path d="M38.5 82 C38.5 77 51.5 77 51.5 82" fill="none" stroke="#8C6BB1" stroke-width="2.5" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="brand-title">EUNOia</h1>
+                    <p class="brand-subtitle">SST Labs</p>
+                    <p class="brand-slogan">Tu tranquilidad, nuestra gestión</p>
+                </div>
+            </div>
+            <div class="header-pill">
+                <i class="fa-solid fa-shield-heart" style="color: #8C6BB1;"></i>
+                <span>Capacitación Unidades Residenciales</span>
+            </div>
+        </header>
+
+        <!-- Cuerpo Dinámico de la Aplicación -->
+        <div class="app-body">
+
+            <!-- ================= PANTALLA 1: REGISTRO DE DATOS ================= -->
+            <section id="screen-welcome" class="animate-fade-in">
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <span class="badge-top">Módulo Evaluativo</span>
+                    <h2 class="main-heading">Accidentes e Incidentes Laborales</h2>
+                    <p class="sub-text">
+                        Completa tus datos para comenzar los <strong>5 casos prácticos</strong>. Al finalizar podrás descargar tu certificado de participación.
+                    </p>
+                </div>
+
+                <!-- Mensaje de validación en caso de campos vacíos -->
+                <div id="form-error" class="alert-error hidden">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span>Por favor completa todos tus datos para generar correctamente tu certificado.</span>
+                </div>
+
+                <div>
+                    <div class="form-group">
+                        <label class="form-label" for="input-name">Nombre y Apellidos Completos *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-user input-icon"></i>
+                            <input type="text" id="input-name" placeholder="Ej. María Fernanda Gómez" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="input-doc">Documento de Identidad (C.C.) *</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-id-card input-icon"></i>
+                                <input type="text" id="input-doc" placeholder="Ej. 1035421890" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="input-role">Tu Cargo / Labor *</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-helmet-safety input-icon"></i>
+                                <select id="input-role" class="form-control">
+                                    <option value="">Selecciona tu labor...</option>
+                                    <option value="Personal de Aseo y Servicios Generales">Aseo y Servicios Generales</option>
+                                    <option value="Guarda de Seguridad / Vigilancia">Guarda de Seguridad / Vigilancia</option>
+                                    <option value="Mantenimiento / Todero">Mantenimiento / Todero</option>
+                                    <option value="Administración / Supervisión">Administración / Supervisión</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="input-unit">Nombre de la Unidad Residencial *</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-building input-icon"></i>
+                            <input type="text" id="input-unit" placeholder="Ej. Unidad Residencial Los Colores" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen rápido antes de iniciar -->
+                <div class="reminder-box">
+                    <i class="fa-solid fa-lightbulb" style="color: #8C6BB1; font-size: 18px; margin-top: 2px;"></i>
+                    <div>
+                        <strong style="color: #4A3267;">Recuerda antes de empezar:</strong><br>
+                        • <strong>Incidente ("El Casi"):</strong> No genera lesión, pero avisa de un peligro.<br>
+                        • <strong>Accidente ("El Hecho"):</strong> Sí genera lesión o daño a la salud.<br>
+                        • <strong>¡Ambos se reportan en el mismo turno!</strong>
+                    </div>
+                </div>
+
+                <button type="button" onclick="startQuiz()" class="btn-primary">
+                    <span>Comenzar Evaluación</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </section>
+
+            <!-- ================= PANTALLA 2: CUESTIONARIO DE 5 CASOS ================= -->
+            <section id="screen-quiz" class="hidden animate-fade-in">
+                <!-- Barra de progreso -->
+                <div>
+                    <div class="progress-meta">
+                        <span id="question-counter">Caso 1 de 5</span>
+                        <span id="score-tracker">Aciertos: 0</span>
+                    </div>
+                    <div class="progress-track">
+                        <div id="progress-bar" class="progress-fill" style="width: 20%;"></div>
+                    </div>
+                </div>
+
+                <!-- Etiqueta de categoría del caso -->
+                <div style="text-align: left;">
+                    <span id="case-badge" class="header-pill">
+                        <i class="fa-solid fa-broom"></i> Caso Práctico
+                    </span>
+                </div>
+
+                <!-- Caja del Caso -->
+                <div class="story-box">
+                    <p id="case-story" style="margin: 0;"></p>
+                </div>
+
+                <p id="case-question" class="question-title"></p>
+
+                <!-- Opciones de respuesta -->
+                <div id="options-container" class="options-list"></div>
+
+                <!-- Caja de retroalimentación pedagógica -->
+                <div id="feedback-box" class="feedback-card hidden animate-fade-in">
+                    <i id="feedback-icon" style="font-size: 20px; margin-top: 2px;"></i>
+                    <div>
+                        <h4 id="feedback-title" style="margin: 0 0 4px 0; font-size: 14px; font-weight: 700;"></h4>
+                        <p id="feedback-text" style="margin: 0; font-size: 13px; line-height: 1.5;"></p>
+                    </div>
+                </div>
+
+                <!-- Botón Siguiente -->
+                <button type="button" id="btn-next" onclick="nextQuestion()" class="btn-primary hidden">
+                    <span id="btn-next-text">Siguiente Caso</span>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </section>
+
+            <!-- ================= PANTALLA 3: RESULTADOS Y CERTIFICADO ================= -->
+            <section id="screen-results" class="hidden animate-fade-in" style="text-align: center;">
+                <div id="result-badge-icon" class="result-icon-circle"></div>
+                
+                <h2 id="result-title" class="main-heading"></h2>
+                <p id="result-subtitle" class="sub-text"></p>
+
+                <!-- Tarjeta de Puntaje -->
+                <div class="score-pill-box">
+                    <div style="text-align: left;">
+                        <span style="display: block; font-size: 11px; color: #6b7280; text-transform: uppercase; font-weight: 700;">Puntaje Obtenido</span>
+                        <span id="final-score" style="font-size: 22px; font-weight: 800; color: #4A3267;">5 / 5 (100%)</span>
+                    </div>
+                    <div class="score-divider"></div>
+                    <div style="text-align: left;">
+                        <span style="display: block; font-size: 11px; color: #6b7280; text-transform: uppercase; font-weight: 700;">Estado</span>
+                        <span id="final-status" style="font-size: 13px; font-weight: 800; color: #16a34a;">APROBADO</span>
+                    </div>
+                </div>
+
+                <!-- Contenedor del Certificado (Canvas + Imagen real para móviles) -->
+                <div id="certificate-section" style="margin-bottom: 14px;">
+                    <p style="font-size: 12px; font-weight: 700; color: #6D4E91; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 8px 0;">
+                        <i class="fa-solid fa-award"></i> Tu Certificado Oficial (Mantén presionada la imagen para guardarla):
+                    </p>
+                    <div class="canvas-frame">
+                        <!-- El canvas dibuja en alta resolución y genera la etiqueta <img> real para celulares -->
+                        <canvas id="certificate-canvas" width="1200" height="850" class="hidden"></canvas>
+                        <img id="certificate-image" class="cert-img-preview" alt="Certificado EUNOia SST Labs" />
+                    </div>
+
+                    <!-- Instrucción infalible para celulares -->
+                    <div class="mobile-help-box">
+                        <strong>📱 ¿Estás en celular? Tienes 3 formas súper fáciles de guardar tu certificado:</strong>
+                        <ol style="margin: 6px 0 0 0; padding-left: 18px;">
+                            <li><strong>Opción 1 (Compartir directo):</strong> Toca el botón verde <em>"Compartir / Enviar por WhatsApp"</em> abajo.</li>
+                            <li><strong>Opción 2 (Guardar en Galería):</strong> Mantén tu dedo presionado 2 segundos encima de la imagen del certificado y toca <strong>"Guardar imagen"</strong> o <strong>"Compartir imagen"</strong>.</li>
+                            <li><strong>Opción 3 (Pantallazo limpio):</strong> Toca <em>"Ver en Pantalla Completa"</em> y tómale una captura de pantalla a tu celular.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Botón Principal Móvil: Compartir directo con Web Share API -->
+                <div style="margin-top: 14px;">
+                    <button type="button" onclick="shareCertificateMobile()" class="btn-whatsapp">
+                        <i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i>
+                        <span>Compartir / Enviar Certificado por WhatsApp</span>
+                    </button>
+                </div>
+
+                <!-- Botones Secundarios de Acción Final -->
+                <div class="actions-row">
+                    <button type="button" id="btn-download" onclick="downloadCertificate()" class="btn-primary">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Descargar Archivo</span>
+                    </button>
+                    <button type="button" onclick="openFullscreenCert()" class="btn-secondary" style="flex: 1; min-width: 180px;">
+                        <i class="fa-solid fa-expand"></i>
+                        <span>Pantalla Completa (Pantallazo)</span>
+                    </button>
+                    <button type="button" onclick="retryQuiz()" class="btn-secondary">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Repetir Evaluación</span>
+                    </button>
+                </div>
+
+                <!-- Mensaje de estado al compartir o descargar -->
+                <div id="share-feedback" class="hidden" style="margin-top: 12px; padding: 10px 14px; border-radius: 10px; background-color: #F5F0FA; color: #4A3267; font-size: 13px; font-weight: 600;"></div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Modal de Pantalla Completa para Captura de Pantalla Rápida -->
+    <div id="fullscreen-cert-modal" class="fullscreen-modal hidden">
+        <div style="color: #ffffff; text-align: center; margin-bottom: 10px; font-size: 13px; max-width: 500px;">
+            📸 <strong>Tómale un pantallazo (captura de pantalla) ahora</strong> o mantén presionado el certificado con tu dedo para guardarlo en tus fotos.
+        </div>
+        <img id="fullscreen-cert-img" src="" alt="Certificado Pantalla Completa" />
+        <button type="button" onclick="closeFullscreenCert()" class="btn-primary" style="max-width: 260px; margin-top: 14px;">
+            <i class="fa-solid fa-xmark"></i>
+            <span>Cerrar Pantalla Completa</span>
+        </button>
+    </div>
+
+    <!-- Pie de página -->
+    <footer style="text-align: center; padding: 16px 8px; font-size: 12px; color: #6D4E91;">
+        <strong>EUNOia SST Labs</strong> • Tu tranquilidad, nuestra gestión • Cumplimiento Decreto 1072 de 2015 y Ley 1562 de 2012
+    </footer>
+
+    <!-- Lógica de la Aplicación y Generador de Certificado en Canvas -->
+    <script>
+        // Base de datos de los 5 Casos Prácticos basados en la estrategia
+        const quizCases = [
+            {
+                badge: "Caso 1 • Personal de Aseo y Escaleras",
+                icon: "fa-broom",
+                story: "Doña María está trapeando las escaleras de la Torre 2. Por el afán de terminar rápido no colocó el cono amarillo de 'Piso Húmedo'. Da un mal paso, se resbala fuerte, pero alcanza a sostenerse de la baranda. No sufre ningún golpe ni dolor, solo se lleva un gran susto.",
+                question: "¿Qué tipo de evento ocurrió y qué debe hacer Doña María?",
+                options: [
+                    {
+                        text: "Fue un ACCIDENTE laboral. Debe ir de inmediato a urgencias por el susto.",
+                        correct: false
+                    },
+                    {
+                        text: "Fue un INCIDENTE laboral ('casi accidente'). Aunque no se golpeó, debe poner los conos de inmediato y reportar lo sucedido para prevenir caídas.",
+                        correct: true
+                    },
+                    {
+                        text: "No fue nada importante. Como no se lastimó, lo mejor es no contarle a nadie y seguir trapeando.",
+                        correct: false
+                    }
+                ],
+                explanation: "¡Muy bien! Según la Resolución 1401 de 2007, es un INCIDENTE porque no hubo lesión, pero sí tuvo el potencial de causarla. Siempre se debe señalizar el piso húmedo y reportar el incidente."
+            },
+            {
+                badge: "Caso 2 • Vigilancia y Rondas Nocturnas",
+                icon: "fa-user-shield",
+                story: "Durante su ronda nocturna por el sótano del parqueadero, el guarda Juan camina revisando mensajes en su celular sin usar la linterna. Tropieza con una tapa de alcantarilla mal puesta, cae al piso y sufre una fuerte torcedura e inflamación en su tobillo derecho.",
+                question: "Frente a lo que le ocurrió a Juan, ¿cuál es la afirmación correcta?",
+                options: [
+                    {
+                        text: "Es un INCIDENTE laboral porque ocurrió de noche y nadie lo vio caer.",
+                        correct: false
+                    },
+                    {
+                        text: "Es un ACCIDENTE de trabajo porque ocurrió cumpliendo su labor y le produjo una lesión física. Debe reportarlo de inmediato para recibir atención por la ARL.",
+                        correct: true
+                    },
+                    {
+                        text: "Es un accidente común de EPS y debe esperar hasta el fin de semana para ir al médico.",
+                        correct: false
+                    }
+                ],
+                explanation: "¡Correcto! Según la Ley 1562 de 2012, todo suceso repentino por causa o con ocasión del trabajo que genere una lesión orgánica o funcional es un ACCIDENTE DE TRABAJO. Recuerda: en rondas nunca uses el celular al caminar y lleva siempre linterna."
+            },
+            {
+                badge: "Caso 3 • La Importancia de Reportar a Tiempo",
+                icon: "fa-clock",
+                story: "El lunes por la mañana, sacando las canecas pesadas del shut de basura, Pedro siente un 'tirón' fuerte en la espalda baja. Piensa que es pasajero y no le avisa al supervisor ni al administrador. El viernes amanece sin poder caminar del dolor y decide avisar por primera vez.",
+                question: "A la luz de la normatividad vigente, ¿por qué es un grave error esperar varios días para reportar?",
+                options: [
+                    {
+                        text: "Porque la ley exige reportar a la ARL dentro de los 2 días hábiles siguientes al evento; demorarse complica demostrar que ocurrió en la unidad y retrasa su atención.",
+                        correct: true
+                    },
+                    {
+                        text: "No hay ningún problema, los accidentes de trabajo se pueden reportar hasta seis meses después sin consecuencias.",
+                        correct: false
+                    },
+                    {
+                        text: "Porque si avisa el lunes le descuentan el día de salario.",
+                        correct: false
+                    }
+                ],
+                explanation: "¡Exacto! Todo accidente o incidente se debe reportar EL MISMO DÍA y EN EL MISMO TURNO. Reportar a tiempo garantiza tu cobertura médica por la ARL y cumple con tus responsabilidades legales del Decreto 1072 de 2015."
+            },
+            {
+                badge: "Caso 4 • Autocuidado en Aseo y Shut de Basuras",
+                icon: "fa-pump-soap",
+                story: "En el cuarto de aseo quedan manchas difíciles en el piso y las bolsas del shut están muy llenas. La operaria piensa mezclar Hipoclorito (Límpido) con ácido desmanchador para que 'limpie más rápido', y luego hundir las bolsas de basura con las manos para que quepan más.",
+                question: "Aplicando las buenas prácticas de autocuidado, ¿qué debe hacer la operaria?",
+                options: [
+                    {
+                        text: "Mezclar los químicos rápidamente aguantando la respiración y aplastar la basura con los pies.",
+                        correct: false
+                    },
+                    {
+                        text: "JAMÁS mezclar hipoclorito con ácidos o detergentes (generan gases tóxicos), ni compactar basuras con manos o pies por riesgo de cortarse con vidrios o agujas; usar siempre guantes y gafas.",
+                        correct: true
+                    },
+                    {
+                        text: "Envasar el químico sobrante en una botella de gaseosa sin marcar para guardarlo.",
+                        correct: false
+                    }
+                ],
+                explanation: "¡Excelente! Nunca se deben mezclar químicos ya que producen vapores tóxicos que queman las vías respiratorias, ni compactar bolsas de basura manualmente porque pueden contener elementos cortopunzantes."
+            },
+            {
+                badge: "Caso 5 • Autocuidado en Portería y Talanqueras",
+                icon: "fa-building-shield",
+                story: "En la portería vehicular, la talanquera (barrera electrónica) ha estado bajando de golpe sola. Además, llega un visitante muy alterado gritando e insultando porque no le abren rápido.",
+                question: "¿Cuál es el comportamiento seguro que debe aplicar el guarda de vigilancia?",
+                options: [
+                    {
+                        text: "Pasar corriendo por debajo de la talanquera antes de que baje y discutir fuerte con el visitante.",
+                        correct: false
+                    },
+                    {
+                        text: "No pasar por debajo de la talanquera en movimiento, reportar la falla como condición peligrosa inmediatamente, y mantener la calma ante el visitante aplicando el protocolo sin caer en riñas.",
+                        correct: true
+                    },
+                    {
+                        text: "Desconectar la talanquera sin avisar a administración y dejar la portería sola.",
+                        correct: false
+                    }
+                ],
+                explanation: "¡Perfecto! El autocuidado en vigilancia incluye prevenir golpes con portones o talanqueras defectuosas (reportando el daño de inmediato) y manejar el riesgo público con cabeza fría y apoyo de protocolos."
+            }
+        ];
+
+        // Variables de estado
+        let participant = {
+            name: "",
+            doc: "",
+            role: "",
+            unit: ""
+        };
+        let currentIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        // Iniciar el cuestionario validando los campos
+        function startQuiz() {
+            const name = document.getElementById('input-name').value.trim();
+            const doc = document.getElementById('input-doc').value.trim();
+            const role = document.getElementById('input-role').value.trim();
+            const unit = document.getElementById('input-unit').value.trim();
+            const errorBox = document.getElementById('form-error');
+
+            if (!name || !doc || !role || !unit) {
+                errorBox.classList.remove('hidden');
+                return;
+            }
+
+            errorBox.classList.add('hidden');
+            participant = { name, doc, role, unit };
+            currentIndex = 0;
+            score = 0;
+
+            document.getElementById('screen-welcome').classList.add('hidden');
+            document.getElementById('screen-results').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.remove('hidden');
+
+            renderQuestion();
+        }
+
+        // Mostrar el caso actual
+        function renderQuestion() {
+            answered = false;
+            const currentCase = quizCases[currentIndex];
+
+            // Actualizar encabezados y barra
+            document.getElementById('question-counter').textContent = `Caso ${currentIndex + 1} de ${quizCases.length}`;
+            document.getElementById('score-tracker').textContent = `Aciertos: ${score}`;
+            const progressPercent = ((currentIndex + 1) / quizCases.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            // Actualizar contenido del caso
+            document.getElementById('case-badge').innerHTML = `<i class="fa-solid ${currentCase.icon}"></i> <span>${currentCase.badge}</span>`;
+            document.getElementById('case-story').textContent = currentCase.story;
+            document.getElementById('case-question').textContent = currentCase.question;
+
+            // Renderizar opciones
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            currentCase.options.forEach((opt, idx) => {
+                const letters = ['A', 'B', 'C'];
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'option-btn';
+                btn.onclick = () => selectOption(idx, btn);
+
+                btn.innerHTML = `
+                    <span class="option-letter">${letters[idx]}</span>
+                    <span class="option-text">${opt.text}</span>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+
+            // Ocultar feedback y botón siguiente
+            document.getElementById('feedback-box').classList.add('hidden');
+            document.getElementById('btn-next').classList.add('hidden');
+        }
+
+        // Seleccionar una respuesta
+        function selectOption(selectedIndex, selectedButton) {
+            if (answered) return;
+            answered = true;
+
+            const currentCase = quizCases[currentIndex];
+            const isCorrect = currentCase.options[selectedIndex].correct;
+            const allButtons = document.getElementById('options-container').children;
+
+            if (isCorrect) {
+                score++;
+                document.getElementById('score-tracker').textContent = `Aciertos: ${score}`;
+            }
+
+            // Estilizar botones según respuesta correcta/incorrecta
+            Array.from(allButtons).forEach((btn, idx) => {
+                btn.classList.add('disabled');
+                const opt = currentCase.options[idx];
+                const letterBadge = btn.querySelector('.option-letter');
+
+                if (opt.correct) {
+                    btn.classList.add('correct-choice');
+                    letterBadge.innerHTML = '<i class="fa-solid fa-check"></i>';
+                } else if (idx === selectedIndex && !opt.correct) {
+                    btn.classList.add('wrong-choice');
+                    letterBadge.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                } else {
+                    btn.classList.add('dimmed');
+                }
+            });
+
+            // Mostrar retroalimentación
+            const feedbackBox = document.getElementById('feedback-box');
+            const feedbackIcon = document.getElementById('feedback-icon');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackText = document.getElementById('feedback-text');
+
+            feedbackBox.classList.remove('hidden', 'feedback-success', 'feedback-warn');
+
+            if (isCorrect) {
+                feedbackBox.classList.add('feedback-success');
+                feedbackIcon.className = 'fa-solid fa-circle-check';
+                feedbackIcon.style.color = '#16a34a';
+                feedbackTitle.textContent = '¡Respuesta Correcta!';
+            } else {
+                feedbackBox.classList.add('feedback-warn');
+                feedbackIcon.className = 'fa-solid fa-circle-info';
+                feedbackIcon.style.color = '#d97706';
+                feedbackTitle.textContent = '¡Ojo al dato! Revisemos la respuesta correcta:';
+            }
+
+            feedbackText.textContent = currentCase.explanation;
+
+            // Mostrar botón de siguiente o finalizar
+            const nextBtn = document.getElementById('btn-next');
+            const nextBtnText = document.getElementById('btn-next-text');
+            nextBtn.classList.remove('hidden');
+
+            if (currentIndex === quizCases.length - 1) {
+                nextBtnText.textContent = 'Finalizar y Generar Certificado';
+            } else {
+                nextBtnText.textContent = 'Siguiente Caso';
+            }
+        }
+
+        // Pasar al siguiente caso o resultados
+        function nextQuestion() {
+            if (currentIndex < quizCases.length - 1) {
+                currentIndex++;
+                renderQuestion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                showResults();
+            }
+        }
+
+        // Mostrar pantalla final y dibujar el certificado
+        function showResults() {
+            document.getElementById('screen-quiz').classList.add('hidden');
+            document.getElementById('screen-results').classList.remove('hidden');
+
+            const percent = Math.round((score / quizCases.length) * 100);
+            document.getElementById('final-score').textContent = `${score} / ${quizCases.length} (${percent}%)`;
+
+            const badgeIcon = document.getElementById('result-badge-icon');
+            const title = document.getElementById('result-title');
+            const subtitle = document.getElementById('result-subtitle');
+            const status = document.getElementById('final-status');
+
+            if (score >= 3) {
+                badgeIcon.style.backgroundColor = '#F5F0FA';
+                badgeIcon.style.color = '#8C6BB1';
+                badgeIcon.innerHTML = '<i class="fa-solid fa-medal"></i>';
+                title.textContent = `¡Felicitaciones, ${participant.name.split(' ')[0]}!`;
+                subtitle.textContent = 'Has completado satisfactoriamente la capacitación en prevención y reporte de Incidentes y Accidentes Laborales.';
+                status.textContent = 'COMPLETADO Y APROBADO';
+                status.style.color = '#16a34a';
+            } else {
+                badgeIcon.style.backgroundColor = '#fef3c7';
+                badgeIcon.style.color = '#d97706';
+                badgeIcon.innerHTML = '<i class="fa-solid fa-book-open-reader"></i>';
+                title.textContent = `¡Gracias por participar, ${participant.name.split(' ')[0]}!`;
+                subtitle.textContent = 'Aquí tienes tu certificado de participación. Te invitamos a repasar las cápsulas o repetir los casos para lograr 5 de 5.';
+                status.textContent = 'PARTICIPACIÓN REGISTRADA';
+                status.style.color = '#6D4E91';
+            }
+
+            drawCertificate(percent);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Repetir el cuestionario con los mismos datos
+        function retryQuiz() {
+            currentIndex = 0;
+            score = 0;
+            document.getElementById('screen-results').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.remove('hidden');
+            renderQuestion();
+        }
+
+        // Dibujar el Certificado Oficial en el elemento Canvas con estética EUNOia SST Labs
+        function drawCertificate(percent) {
+            const canvas = document.getElementById('certificate-canvas');
+            const ctx = canvas.getContext('2d');
+            const W = canvas.width;
+            const H = canvas.height;
+
+            // 1. Fondo blanco limpio
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, W, H);
+
+            // 2. Curvas decorativas suaves al estilo de la papelería EUNOia
+            ctx.save();
+            ctx.fillStyle = '#F5F0FA';
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(W, 0);
+            ctx.lineTo(W, 180);
+            ctx.bezierCurveTo(W * 0.7, 90, W * 0.3, 220, 0, 140);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = '#EFE6FA';
+            ctx.beginPath();
+            ctx.moveTo(0, H);
+            ctx.lineTo(W, H);
+            ctx.lineTo(W, H - 140);
+            ctx.bezierCurveTo(W * 0.65, H - 210, W * 0.35, H - 60, 0, H - 160);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+
+            // 3. Marco doble corporativo
+            ctx.strokeStyle = '#8C6BB1';
+            ctx.lineWidth = 6;
+            ctx.strokeRect(32, 32, W - 64, H - 64);
+
+            ctx.strokeStyle = '#D5C2EC';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(44, 44, W - 88, H - 88);
+
+            // 4. Dibujar el Logo de EUNOia SST Labs centrado arriba
+            drawEunoiaLogoOnCanvas(ctx, W / 2 - 195, 72, 1.0);
+
+            // 5. Título del Certificado
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#4A3267';
+            ctx.font = 'bold 38px Inter, sans-serif';
+            ctx.fillText('CERTIFICADO DE PARTICIPACIÓN', W / 2, 255);
+
+            ctx.fillStyle = '#8C6BB1';
+            ctx.font = '600 18px Inter, sans-serif';
+            ctx.fillText('SISTEMA DE GESTIÓN DE SEGURIDAD Y SALUD EN EL TRABAJO (SG-SST)', W / 2, 288);
+
+            // Línea divisoria decorativa
+            ctx.strokeStyle = '#8C6BB1';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(W / 2 - 120, 308);
+            ctx.lineTo(W / 2 + 120, 308);
+            ctx.stroke();
+
+            // 6. Texto de otorgamiento y Nombre del Trabajador
+            ctx.fillStyle = '#555555';
+            ctx.font = 'italic 22px Inter, sans-serif';
+            ctx.fillText('EUNOia SST Labs certifica que:', W / 2, 355);
+
+            // Nombre grande
+            ctx.fillStyle = '#33204A';
+            ctx.font = 'bold 44px Inter, sans-serif';
+            ctx.fillText(participant.name.toUpperCase(), W / 2, 415);
+
+            // Documento, Cargo y Unidad Residencial
+            ctx.fillStyle = '#6D4E91';
+            ctx.font = '600 22px Inter, sans-serif';
+            ctx.fillText(`Identificado(a) con C.C. No. ${participant.doc} • Cargo: ${participant.role}`, W / 2, 458);
+
+            ctx.fillStyle = '#4A3267';
+            ctx.font = 'bold 23px Inter, sans-serif';
+            ctx.fillText(`Copropiedad / Lugar: ${participant.unit}`, W / 2, 495);
+
+            // 7. Motivo de la capacitación
+            ctx.fillStyle = '#444444';
+            ctx.font = '21px Inter, sans-serif';
+            ctx.fillText('Participó y aprobó el taller práctico y evaluación de conocimientos en:', W / 2, 550);
+
+            // Caja resaltada del tema
+            ctx.fillStyle = '#F5F0FA';
+            roundRect(ctx, 160, 570, W - 320, 74, 16, true, false);
+            ctx.strokeStyle = '#8C6BB1';
+            ctx.lineWidth = 2;
+            roundRect(ctx, 160, 570, W - 320, 74, 16, false, true);
+
+            ctx.fillStyle = '#4A3267';
+            ctx.font = 'bold 25px Inter, sans-serif';
+            ctx.fillText('“PREVENCIÓN Y REPORTE DE INCIDENTES Y ACCIDENTES LABORALES,', W / 2, 603);
+            ctx.fillText('AUTOCUIDADO Y BUENAS PRÁCTICAS EN UNIDADES RESIDENCIALES”', W / 2, 632);
+
+            ctx.fillStyle = '#666666';
+            ctx.font = '17px Inter, sans-serif';
+            ctx.fillText(`Alineado con la Ley 1562 de 2012, Decreto 1072 de 2015 y Resolución 1401 de 2007 • Puntaje: ${score}/${quizCases.length} (${percent}%)`, W / 2, 675);
+
+            // 8. Pie de firmas, fecha y código de verificación
+            const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+            const hoy = new Date();
+            const fechaTexto = `${hoy.getDate()} de ${meses[hoy.getMonth()]} de ${hoy.getFullYear()}`;
+            const folio = 'EUN-' + Math.floor(100000 + Math.random() * 900000);
+
+            // Columna Izquierda: Fecha
+            ctx.fillStyle = '#333333';
+            ctx.font = 'bold 20px Inter, sans-serif';
+            ctx.fillText(fechaTexto, 280, 745);
+            ctx.strokeStyle = '#8C6BB1';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(150, 758);
+            ctx.lineTo(410, 758);
+            ctx.stroke();
+            ctx.fillStyle = '#666666';
+            ctx.font = '16px Inter, sans-serif';
+            ctx.fillText('Fecha de realización', 280, 782);
+
+            // Sello Central de Verificación
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(W / 2, 752, 42, 0, Math.PI * 2);
+            ctx.fillStyle = '#8C6BB1';
+            ctx.fill();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#E4D8F3';
+            ctx.stroke();
+
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 13px Inter, sans-serif';
+            ctx.fillText('SST', W / 2, 747);
+            ctx.font = '11px Inter, sans-serif';
+            ctx.fillText('VERIFICADO', W / 2, 764);
+            ctx.restore();
+
+            // Columna Derecha: Firma EUNOia SST Labs
+            ctx.fillStyle = '#6D4E91';
+            ctx.font = 'bold 22px Quicksand, Inter, sans-serif';
+            ctx.fillText('EUNOia SST Labs', W - 280, 745);
+            ctx.strokeStyle = '#8C6BB1';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(W - 410, 758);
+            ctx.lineTo(W - 150, 758);
+            ctx.stroke();
+            ctx.fillStyle = '#666666';
+            ctx.font = '16px Inter, sans-serif';
+            ctx.fillText(`Gestión SST • Registro: ${folio}`, W - 280, 782);
+
+            // 9. Convertir el Canvas en una imagen real (<img>) para que cualquier celular permita guardarla dejando el dedo presionado
+            const dataUrl = canvas.toDataURL('image/png');
+            const certImg = document.getElementById('certificate-image');
+            const fullImg = document.getElementById('fullscreen-cert-img');
+            if (certImg) certImg.src = dataUrl;
+            if (fullImg) fullImg.src = dataUrl;
+        }
+
+        // Función auxiliar para dibujar el logo de EUNOia directamente en el Canvas
+        function drawEunoiaLogoOnCanvas(ctx, startX, startY, scale = 1) {
+            ctx.save();
+            ctx.translate(startX, startY);
+            ctx.scale(scale, scale);
+
+            // Ícono cuadrado redondeado lila
+            ctx.fillStyle = '#8C6BB1';
+            roundRect(ctx, 0, 0, 110, 110, 24, true, false);
+
+            // Círculo blanco interno
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(55, 55, 42, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Líneas de red
+            ctx.strokeStyle = '#8C6BB1';
+            ctx.lineWidth = 3;
+            const connections = [
+                [44, 38, 32, 27],
+                [44, 38, 66, 35],
+                [44, 38, 29, 51],
+                [44, 38, 41, 70],
+                [44, 38, 72, 57],
+                [72, 57, 66, 35],
+                [72, 57, 41, 70],
+                [72, 57, 60, 76],
+                [41, 70, 55, 87]
+            ];
+            connections.forEach(([x1, y1, x2, y2]) => {
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+            });
+
+            // Nodos pequeños
+            const smallNodes = [[32, 27], [66, 35], [29, 51], [60, 76], [55, 87]];
+            smallNodes.forEach(([cx, cy]) => {
+                ctx.beginPath();
+                ctx.arc(cx, cy, 4.5, 0, Math.PI * 2);
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fill();
+                ctx.stroke();
+            });
+
+            // Nodos de personas
+            const personNodes = [[44, 38, 11], [72, 57, 12], [41, 70, 10]];
+            personNodes.forEach(([cx, cy, r]) => {
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fill();
+                ctx.stroke();
+
+                // Cabeza
+                ctx.beginPath();
+                ctx.arc(cx, cy - 2.5, r * 0.32, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Hombros
+                ctx.beginPath();
+                ctx.arc(cx, cy + r * 0.65, r * 0.55, Math.PI * 1.15, Math.PI * 1.85);
+                ctx.stroke();
+            });
+
+            // Texto EUNOia SST Labs a la derecha del ícono
+            ctx.textAlign = 'left';
+            ctx.fillStyle = '#8C6BB1';
+            ctx.font = 'bold 52px Quicksand, Inter, sans-serif';
+            ctx.fillText('EUNOia', 128, 50);
+
+            ctx.font = '600 28px Quicksand, Inter, sans-serif';
+            ctx.fillText('S S T   L a b s', 130, 82);
+
+            ctx.fillStyle = '#6D4E91';
+            ctx.font = '15px Quicksand, Inter, sans-serif';
+            ctx.fillText('Tu tranquilidad, nuestra gestión', 130, 104);
+
+            ctx.restore();
+        }
+
+        // Función auxiliar para rectángulos con bordes redondeados en Canvas
+        function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+            if (fill) ctx.fill();
+            if (stroke) ctx.stroke();
+        }
+
+        // Mostrar mensaje de ayuda temporal
+        function showShareStatus(msg) {
+            const box = document.getElementById('share-feedback');
+            box.textContent = msg;
+            box.classList.remove('hidden');
+        }
+
+        // Compartir directamente en celulares por WhatsApp (Web Share API con archivo de imagen)
+        async function shareCertificateMobile() {
+            const canvas = document.getElementById('certificate-canvas');
+            const cleanName = participant.name.replace(/[^a-zA-Z0-9]/g, '_');
+            const fileName = `Certificado_SST_EUNOia_${cleanName}.png`;
+
+            try {
+                const dataUrl = canvas.toDataURL('image/png');
+                const res = await fetch(dataUrl);
+                const blob = await res.blob();
+                const file = new File([blob], fileName, { type: 'image/png' });
+
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Certificado EUNOia SST Labs',
+                        text: `Hola, envío mi certificado de participación SST de ${participant.name} (${participant.unit}).`
+                    });
+                    showShareStatus('✅ ¡Menú de compartir abierto! Elige WhatsApp para enviarlo.');
+                    return;
+                }
+            } catch (err) {
+                // Si el usuario cancela o el contenedor bloquea navigator.share, pasamos al método alternativo
+            }
+
+            // Si el navegador interno bloquea la ventana de compartir, abrimos el modo pantalla completa / descarga
+            openFullscreenCert();
+            showShareStatus('💡 Mantén presionada la imagen del certificado con tu dedo por 2 segundos y elige "Compartir imagen" o "Guardar imagen".');
+        }
+
+        // Descargar el certificado como imagen PNG (con respaldo Blob para móviles)
+        function downloadCertificate() {
+            const canvas = document.getElementById('certificate-canvas');
+            const cleanName = participant.name.replace(/[^a-zA-Z0-9]/g, '_');
+            const fileName = `Certificado_SST_EUNOia_${cleanName}.png`;
+
+            if (canvas.toBlob) {
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.download = fileName;
+                    link.href = url;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    setTimeout(() => URL.revokeObjectURL(url), 5000);
+                    showShareStatus('📥 Si tu celular no muestra el archivo en descargas, mantén presionado tu dedo 2 segundos sobre la imagen del certificado arriba y elige "Guardar imagen".');
+                }, 'image/png');
+            } else {
+                const link = document.createElement('a');
+                link.download = fileName;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }
+        }
+
+        // Abrir y cerrar vista de pantalla completa para pantallazo limpio
+        function openFullscreenCert() {
+            document.getElementById('fullscreen-cert-modal').classList.remove('hidden');
+        }
+        function closeFullscreenCert() {
+            document.getElementById('fullscreen-cert-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
